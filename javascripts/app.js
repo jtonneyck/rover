@@ -68,28 +68,20 @@ function Rover(grid, game, startingPosition) {
 function Game() {
   this.rovers = []
   this.checkForCollision = function() {
-    if((this.rovers[0].position[0] === this.rovers[1].position[0]) && 
-    (this.rovers[0].position[1] === this.rovers[1].position[1])) {
-      alert("BOEM!")
+    for(var i = 0; this.rovers.length; i++) {
+      for(var j = 0; this.rovers.length; j++) {
+        if((this.rovers[i].position[0] === this.rovers[j].position[0]) && 
+        (this.rovers[i].position[1] === this.rovers[j].position[1]) && i !== j) {
+          alert("BOEM!")
+        }
+      }
     }
+    
   }
 }
 var theGame = new Game()
 var aRover = new Rover([10,10], theGame, [5,5])
 var anotherOver = new Rover([10, 10], theGame, [5,6])
 
-
-//**  Counter Example **//
-// var someRover = {
-//   position: [5,5],
-//   facing: "N",
-//   moveForward: function() {
-//     switch(this.facing) {
-//       case("N" ):
-//         this.position[1] = this.position[1] + 1
-//         break;
-//     }
-//   }
-// }
-// repeat for the next rover...
-// leads to repetition!
+aRover.tellMeWhatToDo("f")
+//Boem!
