@@ -1,9 +1,12 @@
 function Rover(grid, game, startingPosition) {
   game.rovers.push(this);
+
   if(!Array.isArray(grid) || grid.length != 2) throw new Error("Grid has to be an two dimensional array.")
+  
   this.grid = grid
   this.position = startingPosition
   this.facing = "N"
+  this.travelLog = []
 
   this.action = function(m) {
     switch(m.toUpperCase()) {
@@ -22,16 +25,18 @@ function Rover(grid, game, startingPosition) {
       case "F":
         this.moveForward(); 
         break;
+      case "B":
+        this.moveBackwards(); 
+        break;
       default:
         console.log(m + " is an invalid command. Command ignored.")                      
     }
   }
 
   this.moveForward = function() {
-    
+    this.travelLog.push(this.position) //travel log
     switch(this.facing.toUpperCase()) {
       case "N":
-  
         if((this.position[1] + 1) > grid[1] ) this.OutOfBounds()
         else this.position[1]++;
         break;
@@ -48,7 +53,29 @@ function Rover(grid, game, startingPosition) {
         else this.position[0]--;
         break;
     }
+    game.checkForCollision();
+  }
 
+  this.moveBackwards = function() {
+    this.travelLog.push(this.position) //travel log
+    switch(this.facing.toUpperCase()) {
+      case "N":
+        if(((this.position[1] - 1) < 0)) this.OutOfBounds()
+        else this.position[1]--;
+        break;
+      case "E":
+        if((this.position[0] - 1) < 0 ) this.OutOfBounds()
+        else this.position[0]--;
+        break;
+      case "S":
+        if((this.position[1] + 1) > grid[1] ) this.OutOfBounds()
+        else this.position[1]++;
+        break;
+      case "W":
+        if((this.position[0] + 1) > grid[0] ) this.OutOfBounds()
+        else this.position[0]++;
+        break;
+    }
     game.checkForCollision();
   }
 
@@ -63,22 +90,26 @@ function Rover(grid, game, startingPosition) {
   }
 }
 
-
-
 function Game() {
   this.rovers = []
   this.checkForCollision = function() {
-    for(var i = 0; this.rovers.length; i++) {
-      for(var j = 0; this.rovers.length; j++) {
-        if((this.rovers[i].position[0] === this.rovers[j].position[0]) && 
-        (this.rovers[i].position[1] === this.rovers[j].position[1]) && i !== j) {
+    let collided = []
+    for(var i = 0; i < this.rovers.length; i++) {
+      for(var j = 0; j < this.rovers.length; j++) {
+        if(
+          (this.rovers[i].position[0] === this.rovers[j].position[0]) && 
+          (this.rovers[i].position[1] === this.rovers[j].position[1]) && 
+          (i !== j) && 
+          (collided.indexOf(j) == -1)
+        ) {
           alert("BOEM!")
+          collided.push(i)
         }
       }
     }
-    
   }
 }
+
 var theGame = new Game()
 var aRover = new Rover([10,10], theGame, [5,5])
 var anotherOver = new Rover([10, 10], theGame, [5,6])
