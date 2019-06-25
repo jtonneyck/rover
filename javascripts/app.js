@@ -1,5 +1,5 @@
 function Rover(grid, game, startingPosition) {
-  game.rovers.push(this);
+  game.gameObjects.push(this);
 
   if(!Array.isArray(grid) || grid.length != 2) throw new Error("Grid has to be an two dimensional array.")
   
@@ -91,14 +91,14 @@ function Rover(grid, game, startingPosition) {
 }
 
 function Game() {
-  this.rovers = []
+  this.gameObjects = []
   this.checkForCollision = function() {
     let collided = []
-    for(var i = 0; i < this.rovers.length; i++) {
-      for(var j = 0; j < this.rovers.length; j++) {
+    for(var i = 0; i < this.gameObjects.length; i++) {
+      for(var j = 0; j < this.gameObjects.length; j++) {
         if(
-          (this.rovers[i].position[0] === this.rovers[j].position[0]) && 
-          (this.rovers[i].position[1] === this.rovers[j].position[1]) && 
+          (this.gameObjects[i].position[0] === this.gameObjects[j].position[0]) && 
+          (this.gameObjects[i].position[1] === this.gameObjects[j].position[1]) && 
           (i !== j) && 
           (collided.indexOf(j) == -1)
         ) {
@@ -110,9 +110,15 @@ function Game() {
   }
 }
 
+function obstacle(position, game) {
+  this.position = position
+  game.gameObjects.push(this)
+}
+
 var theGame = new Game()
 var aRover = new Rover([10,10], theGame, [5,5])
 var anotherOver = new Rover([10, 10], theGame, [5,6])
+var anObstacle = new obstacle([1,2], theGame)
 
 aRover.tellMeWhatToDo("f")
 //Boem!
