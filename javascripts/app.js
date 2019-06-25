@@ -29,7 +29,7 @@ function Rover(grid, game, startingPosition) {
 
   this.moveForward = function() {
     
-    switch(this.facing) {
+    switch(this.facing.toUpperCase()) {
       case "N":
   
         if((this.position[1] + 1) > grid[1] ) this.OutOfBounds()
